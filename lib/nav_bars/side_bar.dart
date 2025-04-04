@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 import '../constants.dart';
-import '../sidebar_screens/orders.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({
@@ -98,14 +97,14 @@ class Sidebar extends StatelessWidget {
           label: 'Tickets',
           onTap: () {
 
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const Tickets()));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => const Tickets()));
           },
         ),
         SidebarXItem(
           icon: Icons.list_alt,
           label: 'Orders',
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const Orders()));
+            // Navigator.push(context, MaterialPageRoute(builder: (context) => const Orders()));
           },
         ),
       ],

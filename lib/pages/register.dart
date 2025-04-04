@@ -1,4 +1,3 @@
-import 'package:event_edge/pages/login.dart';
 import 'package:event_edge/widgets/customPasswordField.dart';
 import 'package:event_edge/widgets/text.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../utils/gradient.dart';
 import '../widgets/customInputField.dart';
+import 'login.dart';
 
 
 final usernameControllerProvider =Provider((ref)=> TextEditingController());
