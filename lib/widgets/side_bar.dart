@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
-
-import '../constants.dart';
+import '../utils/constants.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({
@@ -96,7 +95,6 @@ class Sidebar extends StatelessWidget {
           icon: CupertinoIcons.tickets,
           label: 'Tickets',
           onTap: () {
-
             // Navigator.push(context, MaterialPageRoute(builder: (context) => const Tickets()));
           },
         ),
@@ -113,6 +111,5 @@ class Sidebar extends StatelessWidget {
 }
 
 final divider = Divider(color: gray.withOpacity(0.3), height: 1);
-
 
 
