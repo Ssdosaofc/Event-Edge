@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../models/event.dart';
+import '../widgets/recommendCardView.dart';
 
 class Recommendations extends StatefulWidget {
   const Recommendations({super.key});

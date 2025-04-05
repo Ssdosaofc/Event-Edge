@@ -1,6 +1,9 @@
+import 'package:dio/dio.dart';
+import 'package:event_edge/utils/api.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
 
 class Analytics extends StatefulWidget {
   const Analytics({super.key});
@@ -10,29 +13,84 @@ class Analytics extends StatefulWidget {
 }
 
 class _AnalyticsState extends State<Analytics> {
+
+  bool isLoading = false;
+  final Dio _dio = Dio();
+  List<dynamic> usersJson = [];
+
+  Map<String, int> grouped = {};
+  List<ChartData> chartData = [];
+
+  Map<String, int> attend = {};
+  List<ChartData> attendanceData = [];
+
+
+  List<MapEntry<String, int>> topStates = [];
+
+
+  Map<String, int> timeGrouped = {};
+  List<ChartData> timeActivityData = [];
+
+
+  Map<String, int> typeGrouped = {};
+  List<ChartData> typeData = [];
+
+
+  Map<String, int> sourceGrouped = {};
+  List<ChartData> sourceData = [];
+
+  Future<void> _getUsers() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      final response = await _dio.get(Utils.customerUrl);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = response.data;
+        print(data);
+
+        setState(() {
+          usersJson = data['users'];
+
+          grouped = getAgeGroups(usersJson);
+          chartData = convertToChartData(grouped);
+
+          attend = getRepeatAttendees(usersJson);
+          attendanceData = convertToChartData(attend);
+
+          topStates = getTopStates(usersJson);
+
+          timeGrouped = getTimeActivity(usersJson);
+          timeActivityData = convertToChartData(timeGrouped);
+
+          typeGrouped = getTicketTypeCounts(usersJson);
+          typeData = convertToChartData(typeGrouped);
+
+          sourceGrouped = getSourceCounts(usersJson);
+          sourceData = convertToChartData(sourceGrouped);
+        });
+      } else {
+        print('Failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching users: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    _getUsers();
+  }
   @override
   Widget build(BuildContext context) {
-
-    // List<dynamic> usersJson = jsonDecode(jsonResponse);
-
-    // Map<String, int> grouped = getAgeGroups(usersJson);
-    // List<AgeGroupData> chartData = convertToChartData(grouped);
-
-    // Map<String, int> grouped = getRepeatAttendees(usersJson);
-    // List<AttendanceType> attendanceData = convertToPieChartData(grouped);
-
-    // List<MapEntry<String, int>> topStates = getTopStates(usersJson);
-    // Widget topStateCards = buildTopStatesCards(topStates);
-
-    // Map<String, int> timeGrouped = getTimeActivity(usersJson);
-    // List<TimeActivity> timeActivityData = convertToLineChartData(timeGrouped);
-
-    // final typeGrouped = getTicketTypeCounts(users);
-    // final typeData = convertToSourceChartData(sourceGrouped);
-
-    // final sourceGrouped = getSourceCounts(users);
-    // final sourceData = convertToSourceChartData(sourceGrouped);
-
     return Scaffold(
         body: SingleChildScrollView(
           child: Padding(
@@ -49,7 +107,7 @@ class _AnalyticsState extends State<Analytics> {
                         title: ChartTitle(text: ' Age Distribution'),
                         series: <CartesianSeries>[
                           ColumnSeries<ChartData, String>(
-                            // dataSource: chartData,
+                            dataSource: chartData,
                             xValueMapper: (ChartData data, _) => data.label,
                             yValueMapper: (ChartData data, _) => data.value,
                             name: 'Users',
@@ -60,55 +118,50 @@ class _AnalyticsState extends State<Analytics> {
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width/2-22.5,
-                      child: Card(
-                        child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: SfCircularChart(
-                              title: ChartTitle(text: 'Attendee Types'),
-                              legend: Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
-                              series: <CircularSeries>[
-                                DoughnutSeries<ChartData, String>(
-                                  // dataSource: attendanceData, // List<AttendanceType>
-                                  xValueMapper: (ChartData data, _) => data.label,
-                                  yValueMapper: (ChartData data, _) => data.value,
-                                  dataLabelSettings: DataLabelSettings(isVisible: true),
-                                )
-                              ],
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: SfCircularChart(
+                          title: ChartTitle(text: 'Attendee Types'),
+                          legend: Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
+                          series: <CircularSeries>[
+                            DoughnutSeries<ChartData, String>(
+                              dataSource: attendanceData, // List<AttendanceType>
+                              xValueMapper: (ChartData data, _) => data.label,
+                              yValueMapper: (ChartData data, _) => data.value,
+                              dataLabelSettings: DataLabelSettings(isVisible: true),
                             )
-                        ),
-                      ),
+                          ],
+                        )
                     ),
-                    SizedBox(width: 5,),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width/2-22.5,
-                      child: Card(
-                        child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                Text('Top States',style: GoogleFonts.poppins(fontSize:18),),
-                                // ...topStates.map((entry) {
-                                //   return Card(
-                                //     margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                                //     elevation: 4,
-                                //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                //     child: ListTile(
-                                //       leading: Icon(Icons.place, color: Colors.blueAccent),
-                                //       title: Text(entry.key),
-                                //       subtitle: Text('Attendees: ${entry.value}'),
-                                //     ),
-                                //   );
-                                // }).toList()
-                              ],
-                            )
-                        ),
-                      ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            Text('Top States',style: GoogleFonts.poppins(fontSize:18),),
+                            ...topStates.map((entry) {
+                              return Card(
+                                margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                child: ListTile(
+                                  leading: Icon(Icons.place, color: Colors.blueAccent),
+                                  title: Text(entry.key),
+                                  subtitle: Text('Attendees: ${entry.value}'),
+                                ),
+                              );
+                            }).toList()
+                          ],
+                        )
                     ),
-                  ],
+                  ),
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
@@ -126,7 +179,7 @@ class _AnalyticsState extends State<Analytics> {
                                 primaryYAxis: NumericAxis(),
                                 series: <CartesianSeries>[
                                   LineSeries<ChartData, String>(
-                                    // dataSource: timeActivityData, // List<TimeActivity>
+                                    dataSource: timeActivityData, // List<TimeActivity>
                                     xValueMapper: (ChartData data, _) => data.label,
                                     yValueMapper: (ChartData data, _) => data.value,
                                     markerSettings: MarkerSettings(isVisible: true),
@@ -157,7 +210,7 @@ class _AnalyticsState extends State<Analytics> {
                                 legend: Legend(isVisible: true),
                                 series: <DoughnutSeries<ChartData, String>>[
                                   DoughnutSeries<ChartData, String>(
-                                    // dataSource: typeData, // List<TicketData>
+                                    dataSource: typeData, // List<TicketData>
                                     xValueMapper: (ChartData data, _) => data.label,
                                     yValueMapper: (ChartData data, _) => data.value,
                                     dataLabelSettings: DataLabelSettings(isVisible: true),
@@ -189,11 +242,11 @@ class _AnalyticsState extends State<Analytics> {
                                   title: AxisTitle(text: 'Source'),
                                 ),
                                 primaryYAxis: NumericAxis(
-                                  title: AxisTitle(text: 'Users Converted'),
+                                  title: AxisTitle(text: 'Users Registered'),
                                 ),
                                 series: <CartesianSeries>[
                                   ColumnSeries<ChartData, String>(
-                                    // dataSource: chartData,
+                                    dataSource: sourceData,
                                     xValueMapper: (ChartData data, _) => data.label,
                                     yValueMapper: (ChartData data, _) => data.value,
                                     dataLabelSettings: DataLabelSettings(isVisible: true),
@@ -208,6 +261,7 @@ class _AnalyticsState extends State<Analytics> {
                     ),
                   ),
                 ),
+                SizedBox(height: 70,)
               ],
             ),
           ),
@@ -278,6 +332,7 @@ List<MapEntry<String, int>> getTopStates(List<dynamic> users) {
     stateCounts[state] = (stateCounts[state] ?? 0) + 1;
   }
 
+
   List<MapEntry<String, int>> sorted = stateCounts.entries.toList()
     ..sort((a, b) => b.value.compareTo(a.value));
 
@@ -323,10 +378,28 @@ Map<String, int> getTicketTypeCounts(List<dynamic> users) {
 Map<String, int> getSourceCounts(List<dynamic> users) {
   final Map<String, int> sourceCounts = {};
 
+
   for (var user in users) {
     String source = user['source'];
     sourceCounts[source] = (sourceCounts[source] ?? 0) + 1;
   }
 
-  return sourceCounts;
+
+  final sortedEntries = sourceCounts.entries.toList()
+    ..sort((a, b) => b.value.compareTo(a.value));
+
+
+  final top3 = sortedEntries.take(2).toList();
+
+  final others = sortedEntries.skip(2).fold<int>(
+    0,
+        (sum, entry) => sum + entry.value,
+  );
+
+  final result = Map<String, int>.fromEntries(top3);
+  if (others > 0) {
+    result['Others'] = others;
+  }
+
+  return result;
 }
