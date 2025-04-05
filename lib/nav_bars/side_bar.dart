@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 import '../models/user.dart';
+import '../pages/login.dart';
 import '../pages/side_bar_pages/orders.dart';
 import '../pages/side_bar_pages/tickets.dart';
 import '../provider/themeNotifier_provider.dart';
@@ -117,6 +119,13 @@ class Sidebar extends ConsumerWidget {
 
   final SidebarXController _controller;
 
+  void logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+  }
+
   @override
   Widget build(BuildContext context,WidgetRef ref) {
     return SidebarX(
@@ -206,6 +215,13 @@ class Sidebar extends ConsumerWidget {
           label: 'Orders',
           onTap: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) => Orders(users: sampleUsers,)));
+          },
+        ),
+        SidebarXItem(
+          icon: Icons.power_settings_new,
+          label: 'Logout',
+          onTap: () {
+            logout(context);
           },
         ),
         // SidebarXItem(

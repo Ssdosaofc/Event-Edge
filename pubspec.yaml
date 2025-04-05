@@ -48,6 +48,8 @@ dependencies:
   printing:
   html:
   socket_io_client:
+  syncfusion_flutter_charts:
+  dio:
 
 dev_dependencies:
   flutter_test:

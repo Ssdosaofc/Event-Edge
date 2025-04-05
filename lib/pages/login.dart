@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -66,6 +65,8 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       final responseData = jsonDecode(response.body);
+      print("Response Body: ${response.body}");
+
 
       if (response.statusCode == 200) {
         sharedPreferences = await SharedPreferences.getInstance();
@@ -73,6 +74,10 @@ class _LoginPageState extends State<LoginPage> {
         await sharedPreferences.setBool('isLoggedIn', true);
         await sharedPreferences.setString('name', responseData['name']);
         await sharedPreferences.setString('email', responseData['email']);
+
+        print("Status Code: ${response.statusCode}");
+        print("Response Body: ${response.body}");
+
 
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -218,7 +223,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: _isLoading
                               ? null
                               : () async {
-                            // await loginUser();
+                            await loginUser();
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(builder: (context) => Home()),

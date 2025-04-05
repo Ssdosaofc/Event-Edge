@@ -9,6 +9,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  if (prefs.containsKey('token')) {
+    print('User is logged in. Token: ${prefs.getString('token')}');
+  } else {
+    print('No token found. User not logged in.');
+  }
+
 
   runApp(ProviderScope(child: MyApp(isLoggedIn: isLoggedIn)));
 }
