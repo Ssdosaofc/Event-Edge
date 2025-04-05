@@ -8,7 +8,7 @@ import '../nav_bars/bottom_nav_bar.dart';
 import '../nav_bars/side_bar.dart';
 import 'addEvent.dart';
 import 'dashboard.dart';
-import 'histroy.dart';
+import 'history.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:event_edge/utils/api.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../enums/user.dart';
 
 class Analytics extends StatefulWidget {
   const Analytics({super.key});
@@ -21,22 +21,21 @@ class _AnalyticsState extends State<Analytics> {
   Map<String, int> grouped = {};
   List<ChartData> chartData = [];
 
-  // Repeat attendance chart
   Map<String, int> attend = {};
   List<ChartData> attendanceData = [];
 
-  // Top states
+
   List<MapEntry<String, int>> topStates = [];
 
-  // Time of activity
+
   Map<String, int> timeGrouped = {};
   List<ChartData> timeActivityData = [];
 
-  // Ticket types
+
   Map<String, int> typeGrouped = {};
   List<ChartData> typeData = [];
 
-  // Source of tickets
+
   Map<String, int> sourceGrouped = {};
   List<ChartData> sourceData = [];
 
@@ -46,7 +45,7 @@ class _AnalyticsState extends State<Analytics> {
         isLoading = true;
       });
 
-      final response = await _dio.get('http://10.100.39.38:4500/api/customers');
+      final response = await _dio.get(Utils.customerUrl);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = response.data;
@@ -93,180 +92,180 @@ class _AnalyticsState extends State<Analytics> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Card(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: SfCartesianChart(
-                      primaryXAxis: CategoryAxis(),
-                      title: ChartTitle(text: ' Age Distribution'),
-                      series: <CartesianSeries>[
-                        ColumnSeries<ChartData, String>(
-                          dataSource: chartData,
-                          xValueMapper: (ChartData data, _) => data.label,
-                          yValueMapper: (ChartData data, _) => data.value,
-                          name: 'Users',
-                          dataLabelSettings: DataLabelSettings(isVisible: true),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Card(
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: SfCircularChart(
-                      title: ChartTitle(text: 'Attendee Types'),
-                      legend: Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
-                      series: <CircularSeries>[
-                        DoughnutSeries<ChartData, String>(
-                          dataSource: attendanceData, // List<AttendanceType>
-                          xValueMapper: (ChartData data, _) => data.label,
-                          yValueMapper: (ChartData data, _) => data.value,
-                          dataLabelSettings: DataLabelSettings(isVisible: true),
-                        )
-                      ],
-                    )
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Card(
-                  child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Text('Top States',style: GoogleFonts.poppins(fontSize:18),),
-                          ...topStates.map((entry) {
-                            return Card(
-                              margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                              elevation: 4,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              child: ListTile(
-                                leading: Icon(Icons.place, color: Colors.blueAccent),
-                                title: Text(entry.key),
-                                subtitle: Text('Attendees: ${entry.value}'),
-                              ),
-                            );
-                          }).toList()
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child: SfCartesianChart(
+                        primaryXAxis: CategoryAxis(),
+                        title: ChartTitle(text: ' Age Distribution'),
+                        series: <CartesianSeries>[
+                          ColumnSeries<ChartData, String>(
+                            dataSource: chartData,
+                            xValueMapper: (ChartData data, _) => data.label,
+                            yValueMapper: (ChartData data, _) => data.value,
+                            name: 'Users',
+                            dataLabelSettings: DataLabelSettings(isVisible: true),
+                          )
                         ],
-                      )
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Card(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child:  SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Card(
-                        child: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: SfCartesianChart(
-                            title: ChartTitle(text: 'User Purchase Time Analysis'),
-                            primaryXAxis: CategoryAxis(),
-                            primaryYAxis: NumericAxis(),
-                            series: <CartesianSeries>[
-                              LineSeries<ChartData, String>(
-                                dataSource: timeActivityData, // List<TimeActivity>
-                                xValueMapper: (ChartData data, _) => data.label,
-                                yValueMapper: (ChartData data, _) => data.value,
-                                markerSettings: MarkerSettings(isVisible: true),
-                                dataLabelSettings: DataLabelSettings(isVisible: true),
-                              ),
-                            ],
-                          )
-
-                        ),
-                      ),
-                    ),
-
-                  ),
-              ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Card(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child:  SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Card(
-                        child: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: SfCircularChart(
-                            title: ChartTitle(text: 'Ticket Type Distribution'),
-                            legend: Legend(isVisible: true),
-                            series: <DoughnutSeries<ChartData, String>>[
-                              DoughnutSeries<ChartData, String>(
-                                dataSource: typeData, // List<TicketData>
-                                xValueMapper: (ChartData data, _) => data.label,
-                                yValueMapper: (ChartData data, _) => data.value,
-                                dataLabelSettings: DataLabelSettings(isVisible: true),
-                                radius: '80%',
-                                innerRadius: '40%',
-                              )
-                            ],
-                          )
-                        ),
-                      ),
-                    ),
-
-                  ),
-              ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Card(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child:  SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Card(
-                        child: Padding(
-                            padding: EdgeInsets.all(20),
-                            child: SfCartesianChart(
-                              title: ChartTitle(text: 'Marketing Channel Conversion Tracking'),
-                              primaryXAxis: CategoryAxis(
-                                title: AxisTitle(text: 'Source'),
-                              ),
-                              primaryYAxis: NumericAxis(
-                                title: AxisTitle(text: 'Users Registered'),
-                              ),
-                              series: <CartesianSeries>[
-                                ColumnSeries<ChartData, String>(
-                                  dataSource: sourceData,
-                                  xValueMapper: (ChartData data, _) => data.label,
-                                  yValueMapper: (ChartData data, _) => data.value,
-                                  dataLabelSettings: DataLabelSettings(isVisible: true),
-                                  color: Colors.teal,
-                                )
-                              ],
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: SfCircularChart(
+                          title: ChartTitle(text: 'Attendee Types'),
+                          legend: Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
+                          series: <CircularSeries>[
+                            DoughnutSeries<ChartData, String>(
+                              dataSource: attendanceData, // List<AttendanceType>
+                              xValueMapper: (ChartData data, _) => data.label,
+                              yValueMapper: (ChartData data, _) => data.value,
+                              dataLabelSettings: DataLabelSettings(isVisible: true),
                             )
+                          ],
+                        )
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            Text('Top States',style: GoogleFonts.poppins(fontSize:18),),
+                            ...topStates.map((entry) {
+                              return Card(
+                                margin: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                child: ListTile(
+                                  leading: Icon(Icons.place, color: Colors.blueAccent),
+                                  title: Text(entry.key),
+                                  subtitle: Text('Attendees: ${entry.value}'),
+                                ),
+                              );
+                            }).toList()
+                          ],
+                        )
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child:  SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Card(
+                          child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: SfCartesianChart(
+                                title: ChartTitle(text: 'User Purchase Time Analysis'),
+                                primaryXAxis: CategoryAxis(),
+                                primaryYAxis: NumericAxis(),
+                                series: <CartesianSeries>[
+                                  LineSeries<ChartData, String>(
+                                    dataSource: timeActivityData, // List<TimeActivity>
+                                    xValueMapper: (ChartData data, _) => data.label,
+                                    yValueMapper: (ChartData data, _) => data.value,
+                                    markerSettings: MarkerSettings(isVisible: true),
+                                    dataLabelSettings: DataLabelSettings(isVisible: true),
+                                  ),
+                                ],
+                              )
 
+                          ),
+                        ),
+                      ),
+
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child:  SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Card(
+                          child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: SfCircularChart(
+                                title: ChartTitle(text: 'Ticket Type Distribution'),
+                                legend: Legend(isVisible: true),
+                                series: <DoughnutSeries<ChartData, String>>[
+                                  DoughnutSeries<ChartData, String>(
+                                    dataSource: typeData, // List<TicketData>
+                                    xValueMapper: (ChartData data, _) => data.label,
+                                    yValueMapper: (ChartData data, _) => data.value,
+                                    dataLabelSettings: DataLabelSettings(isVisible: true),
+                                    radius: '80%',
+                                    innerRadius: '40%',
+                                  )
+                                ],
+                              )
+                          ),
+                        ),
+                      ),
+
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(20),
+                      child:  SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Card(
+                          child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: SfCartesianChart(
+                                title: ChartTitle(text: 'Marketing Channel Conversion Tracking'),
+                                primaryXAxis: CategoryAxis(
+                                  title: AxisTitle(text: 'Source'),
+                                ),
+                                primaryYAxis: NumericAxis(
+                                  title: AxisTitle(text: 'Users Registered'),
+                                ),
+                                series: <CartesianSeries>[
+                                  ColumnSeries<ChartData, String>(
+                                    dataSource: sourceData,
+                                    xValueMapper: (ChartData data, _) => data.label,
+                                    yValueMapper: (ChartData data, _) => data.value,
+                                    dataLabelSettings: DataLabelSettings(isVisible: true),
+                                    color: Colors.teal,
+                                  )
+                                ],
+                              )
+
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 70,)
-            ],
+                SizedBox(height: 70,)
+              ],
+            ),
           ),
-        ),
-      )
+        )
     );
   }
 }
@@ -333,7 +332,7 @@ List<MapEntry<String, int>> getTopStates(List<dynamic> users) {
     stateCounts[state] = (stateCounts[state] ?? 0) + 1;
   }
 
-  // Sort and take top 3
+
   List<MapEntry<String, int>> sorted = stateCounts.entries.toList()
     ..sort((a, b) => b.value.compareTo(a.value));
 
@@ -379,26 +378,24 @@ Map<String, int> getTicketTypeCounts(List<dynamic> users) {
 Map<String, int> getSourceCounts(List<dynamic> users) {
   final Map<String, int> sourceCounts = {};
 
-  // Count all sources
+
   for (var user in users) {
     String source = user['source'];
     sourceCounts[source] = (sourceCounts[source] ?? 0) + 1;
   }
 
-  // Sort by count descending
+
   final sortedEntries = sourceCounts.entries.toList()
     ..sort((a, b) => b.value.compareTo(a.value));
 
-  // Get top 3 entries
+
   final top3 = sortedEntries.take(2).toList();
 
-  // Sum the rest as "Others"
   final others = sortedEntries.skip(2).fold<int>(
     0,
         (sum, entry) => sum + entry.value,
   );
 
-  // Create result map
   final result = Map<String, int>.fromEntries(top3);
   if (others > 0) {
     result['Others'] = others;
@@ -406,8 +403,3 @@ Map<String, int> getSourceCounts(List<dynamic> users) {
 
   return result;
 }
-
-
-
-
-

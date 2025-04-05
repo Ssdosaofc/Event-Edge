@@ -1,4 +1,5 @@
 class Event{
+  String id;
   String poster;
   String title;
   String description;
@@ -13,9 +14,10 @@ class Event{
   String timestamp;
   String start;
   String end;
-  int price;
+  double price;
 
   Event({
+    required this.id,
     required this.poster,
     required this.title,
     required this.description,
@@ -34,6 +36,7 @@ class Event{
 
   Map<String, dynamic> toMap() {
     return {
+      '_id':id,
       'poster': poster,
       'title': title,
       'description': description,
@@ -54,6 +57,7 @@ class Event{
 
   factory Event.fromMap(Map<String, dynamic> map) {
     return Event(
+      id: map['_id'],
       poster: map['poster'],
       title: map['title'],
       description: map['description'],
@@ -67,7 +71,8 @@ class Event{
       timestamp: map['timestamp'],
       start: map['start'],
       end: map['end'],
-      price: map['price']
+
+      price: (map['price'] as num).toDouble(),
     );
   }
 }
