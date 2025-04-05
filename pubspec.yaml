@@ -42,6 +42,12 @@ dependencies:
   shared_preferences:
   snackbar:
   image_picker:
+  pie_chart:
+  fl_chart:
+  pdf:
+  printing:
+  html:
+  socket_io_client:
 
 dev_dependencies:
   flutter_test:
