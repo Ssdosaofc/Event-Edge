@@ -37,7 +37,19 @@ dependencies:
   riverpod:
   flutter_riverpod:
   google_fonts:
-  sidebarx: 
+  sidebarx:
+  http:
+  shared_preferences:
+  snackbar:
+  image_picker:
+  pie_chart:
+  fl_chart:
+  pdf:
+  printing:
+  html:
+  socket_io_client:
+  syncfusion_flutter_charts:
+  dio:
 
 dev_dependencies:
   flutter_test:
@@ -62,8 +74,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+     - assets/images/blank.png
+     - assets/images/people.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
