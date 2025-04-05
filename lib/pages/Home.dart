@@ -6,6 +6,7 @@ import 'package:sidebarx/sidebarx.dart';
 
 import '../nav_bars/bottom_nav_bar.dart';
 import '../nav_bars/side_bar.dart';
+import 'addEvent.dart';
 import 'dashboard.dart';
 import 'histroy.dart';
 
@@ -36,7 +37,7 @@ class _HomeState extends State<Home> {
           backgroundColor: Color(0xFFFFE0B2),
           foregroundColor: Colors.black,
           onPressed: () {
-            // Navigator.push(context, MaterialPageRoute(builder: (context)=>AddEvent()));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>AddEvent()));
           },
           child: Icon(Icons.add,weight: 10,),
         ),

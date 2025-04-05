@@ -4,6 +4,7 @@ class Utils {
 
   static String registrationUrl = "$baseUrl/registeration";
   static String loginUrl = "$baseUrl/login";
+  static String forgotUrl="$baseUrl/forgot_password";
 
 
 }

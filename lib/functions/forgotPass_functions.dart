@@ -1,3 +1,4 @@
+import 'package:event_edge/utils/api.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import '../provider/snackbar_provider.dart';
 
 
 Future<void> sentEmail(BuildContext context, WidgetRef ref, String email) async {
-  final url = Uri.parse("https://your-api.com/auth/forgot-password");
+  final url = Uri.parse(Utils.forgotUrl);
 
   try {
     final response = await http.post(

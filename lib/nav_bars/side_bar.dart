@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sidebarx/sidebarx.dart';
 
+import '../provider/themeNotifier_provider.dart';
 import '../utils/constants.dart';
 
 class Sidebar extends StatelessWidget {
@@ -84,6 +86,38 @@ class Sidebar extends StatelessWidget {
           ),
         );
       },
+      footerBuilder: (context, extended) {
+        return Consumer(
+          builder: (context, ref, _) {
+            final themeMode = ref.watch(themeNotifierProvider);
+            final isDarkMode = themeMode == ThemeMode.dark;
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                children: [
+                  Icon(Icons.dark_mode, color: Colors.grey[700], size: 20),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      "Dark Mode",
+                      style: TextStyle(color: Colors.grey[800]),
+                    ),
+                  ),
+                  Switch(
+                    value: isDarkMode,
+                    onChanged: (val) {
+                      ref.read(themeNotifierProvider.notifier).toggleTheme();
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+
+
       items: [
         SidebarXItem(
           icon: Icons.home,

@@ -32,18 +32,20 @@ class _LoginPageState extends State<LoginPage> {
     final String password = passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
-      // Fluttertoast.showToast(msg: "Please fill in all fields.");
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
           content: Container(
-            color: Colors.red,
+
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
+              color: Colors.red,
             ),
             child: Row(
               children: [
-                Icon(Icons.error_outline,),
-                Text("Please fill in all fields"),
+                Icon(Icons.error_outline,color: Colors.white,),
+                Text(" All fields are required"),
               ],
             ),
           )));
@@ -69,19 +71,23 @@ class _LoginPageState extends State<LoginPage> {
         sharedPreferences = await SharedPreferences.getInstance();
         await sharedPreferences.setString('token', responseData['token']);
         await sharedPreferences.setBool('isLoggedIn', true);
+        await sharedPreferences.setString('name', responseData['name']);
+        await sharedPreferences.setString('email', responseData['email']);
 
-        // Fluttertoast.showToast(msg: "Login successful!");
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.green,
             content: Container(
-              color: Colors.green,
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
+                color: Colors.green
               ),
               child: Row(
                 children: [
                   Icon(Icons.check_circle_outline,),
-                  Text("Login successful"),
+                  Text(" Login successful"),
                 ],
               ),
             )));
@@ -212,7 +218,11 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: _isLoading
                               ? null
                               : () async {
-                            await loginUser();
+                            // await loginUser();
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => Home()),
+                            );
                           },
                           child: _isLoading
                               ? const CircularProgressIndicator(color: Colors.white)
