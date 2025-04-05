@@ -12,8 +12,8 @@ class Event{
   int refunded;
   int remaining;
   String timestamp;
-  DateTime start;
-  DateTime end;
+  String start;
+  String end;
   double price;
 
   Event({
@@ -69,8 +69,8 @@ class Event{
       sold: map['sold'] ?? 0,
       refunded: map['refunded'] ?? 0,
       timestamp: map['timestamp'],
-      start: DateTime.parse(map['start']),
-      end: DateTime.parse(map['end']),
+      start: map['start'],
+      end: map['end'],
 
       price: (map['price'] as num).toDouble(),
     );

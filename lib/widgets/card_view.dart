@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
 
-import '../constants.dart';
+import '../utils/constants.dart';
 
 class CardView extends StatelessWidget {
   final String poster;

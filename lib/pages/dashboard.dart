@@ -93,7 +93,7 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin{
 
         List<Event> fetchedEvents = (response.data as List)
             .map((e) => Event.fromMap(e))
-            .where((event) => event.end.isAfter(now))
+            .where((event) => DateTime.parse(event.end).isAfter(now))
             .toList();
 
         setState(() {

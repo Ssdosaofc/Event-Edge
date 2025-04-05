@@ -1,11 +1,17 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../models/event.dart';
 import '../utils/constants.dart';
+import 'package:uuid/uuid.dart';
+import 'package:share_plus/share_plus.dart';
+
 
 class AddEvent extends StatefulWidget {
   const AddEvent({super.key});
@@ -18,6 +24,8 @@ class _AddEventState extends State<AddEvent> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
   final TextEditingController _ticketsController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _eventController = TextEditingController();
@@ -26,12 +34,141 @@ class _AddEventState extends State<AddEvent> {
 
   File? filePath;
   final ImagePicker picker = ImagePicker();
+  final Uuid uuid = Uuid();
+
 
   String val = '';
 
   DateTime? _eventDate;
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
+
+  DateTime? startDateTime;
+  DateTime? endDateTime;
+  int? startTimestamp;
+  int? endTimestamp;
+
+  bool isLoading = false;
+  final Dio _dio = Dio();
+
+  Future<String?> fileToBase64(File? file) async {
+    if (file == null) return null;
+
+    try {
+      final bytes = await file.readAsBytes();
+      return base64Encode(bytes);
+    } catch (e) {
+      print('Error converting file to base64: $e');
+      return null;
+    }
+  }
+
+  Future<void> _addResult() async {
+    try {
+      if (_eventDate != null && _startTime != null && _endTime != null) {
+        startDateTime = DateTime(
+          _eventDate!.year,
+          _eventDate!.month,
+          _eventDate!.day,
+          _startTime!.hour,
+          _startTime!.minute,
+        );
+
+        endDateTime = DateTime(
+          _eventDate!.year,
+          _eventDate!.month,
+          _eventDate!.day,
+          _endTime!.hour,
+          _endTime!.minute,
+        );
+
+        startTimestamp = startDateTime?.millisecondsSinceEpoch;
+        endTimestamp = endDateTime?.millisecondsSinceEpoch;
+        setState(() {
+          isLoading = true;
+        });
+
+        Future.delayed(Duration(milliseconds: 300), () async {
+          final response = await _dio.post(
+            'http://10.100.59.55:4000/api/events',
+            data: jsonEncode(
+              Event(
+                // poster: base64Encode(await filePath!.readAsBytes()),
+                poster: 'jbjn.',
+                title: _titleController.text,
+                description: _descController.text,
+                address: _addressController.text,
+                state: _stateController.text,
+                country: _countryController.text,
+                category: val,
+                tickets: _ticketsController.value.text == ''
+                    ? 0
+                    : int.parse(_priceController.value.text),
+                timestamp: DateTime.now().toString(),
+                start: startTimestamp.toString(),
+                end: endTimestamp.toString(),
+                price: _priceController.value.text == '' ? 0 : double.parse(_priceController.value.text),
+                id: uuid.v4(),
+              ).toMap(),
+            ),
+            options: Options(
+              contentType: Headers.jsonContentType,
+              responseType: ResponseType.json,
+            ),
+          );
+
+          print(response);
+          _showShareDialog();
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Error uploading image: $e');
+    }
+  }
+
+  void _showShareDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Event Added"),
+          content: Text("Your event has been successfully added. Do you want to share it on social media?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                _shareEvent();
+                Navigator.of(context).pop();
+              },
+              child: Text("Share"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _shareEvent() {
+    final eventDetails = "Check out this event!\n\n"
+        "Title: ${_titleController.text}\n"
+        "Description: ${_descController.text}\n"
+        "Location: ${_addressController.text}, ${_stateController.text}, ${_countryController.text}\n"
+        "Tickets: ${_ticketsController.text} available\n"
+        "Price: \$${_priceController.text}\n"
+        "Date: ${_eventController.text}\n"
+        "Start Time: ${_startController.text}\n"
+        "End Time: ${_endController.text}";
+
+    Share.share(eventDetails);
+  }
 
   @override
   void initState() {
@@ -94,7 +231,9 @@ class _AddEventState extends State<AddEvent> {
                   Navigator.of(context).pop();
                 }, child: Text('Cancel',style: TextStyle(color: Colors.grey),)),
                 Text('Add Event',style: GoogleFonts.poppins(fontWeight: FontWeight.w500,fontSize: 20),),
-                TextButton(onPressed: (){}, child: Text('Add',style: TextStyle(color: orange),)),
+                TextButton(
+                    onPressed: _addResult,
+                    child: Text('Add',style: TextStyle(color: orange),)),
               ],
             ),
             SizedBox(height: 15,),
@@ -175,7 +314,7 @@ class _AddEventState extends State<AddEvent> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width/2 - 22.5,
                   child: TextField(
-                    controller: _addressController,
+                    controller: _stateController,
                     keyboardType: TextInputType.text,
                     decoration:InputDecoration(
                       labelText: 'State',
@@ -190,7 +329,7 @@ class _AddEventState extends State<AddEvent> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width/2 - 22.5,
                   child: TextField(
-                    controller: _addressController,
+                    controller: _countryController,
                     keyboardType: TextInputType.text,
                     decoration:InputDecoration(
                       labelText: 'Country',
@@ -274,7 +413,7 @@ class _AddEventState extends State<AddEvent> {
             SizedBox(height: 10,),
             TextField(
               controller: _eventController,
-              // keyboardType: TextInputType.datetime,
+              keyboardType: TextInputType.datetime,
               decoration:InputDecoration(
                   hintText: 'Date',
                   hintStyle: TextStyle(color: Colors.grey[500]),
@@ -370,5 +509,5 @@ class _AddEventState extends State<AddEvent> {
       initialTime: TimeOfDay.now(),
     );
     _endController.text = '${_endTime!.hour}:${_endTime!.minute}';
-  }
+    }
 }

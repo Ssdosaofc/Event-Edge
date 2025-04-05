@@ -50,7 +50,10 @@ dependencies:
   socket_io_client:
   syncfusion_flutter_charts:
   dio:
-
+  syncfusion_flutter_treemap:
+  path_provider:
+  uuid: ^3.0.4
+  share_plus:
 dev_dependencies:
   flutter_test:
     sdk: flutter

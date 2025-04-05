@@ -37,7 +37,7 @@ class _HistroyState extends State<History> {
 
         List<Event> fetchedEvents = (response.data as List)
             .map((e) => Event.fromMap(e))
-            .where((event) => event.end.isBefore(now))
+            .where((event) => DateTime.parse(event.end).isBefore(now))
             .toList();
 
         setState(() {

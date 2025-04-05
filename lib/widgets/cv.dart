@@ -12,8 +12,8 @@ class CardView extends StatelessWidget {
   final String address;
   final double price;
   // final String date;
-  final DateTime start;
-  final DateTime end;
+  final String start;
+  final String end;
   final VoidCallback? onTap;
 
   const CardView({

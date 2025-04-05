@@ -1,6 +1,6 @@
 
 class Utils {
-  static String baseUrl = "http://10.1.49.105:4000/api";
+  static String baseUrl = "http://10.100.59.55:4000/api";
 
   static String registrationUrl = "$baseUrl/registeration";
   static String loginUrl = "$baseUrl/login";
