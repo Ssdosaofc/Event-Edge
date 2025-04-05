@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
-import '../constants.dart';
+import '../utils/constants.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({
@@ -32,10 +32,7 @@ class Sidebar extends StatelessWidget {
         ),
         itemTextPadding: const EdgeInsets.only(left: 30),
         selectedItemTextPadding: const EdgeInsets.only(left: 30),
-        // itemDecoration: BoxDecoration(
-        //   borderRadius: BorderRadius.circular(10),
-        //   border: Border.all(color: canvasColor),
-        // ),
+
         selectedItemDecoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(

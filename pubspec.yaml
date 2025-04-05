@@ -37,7 +37,10 @@ dependencies:
   riverpod:
   flutter_riverpod:
   google_fonts:
-  sidebarx: 
+  sidebarx:
+  http:
+  shared_preferences:
+  snackbar:
 
 dev_dependencies:
   flutter_test:

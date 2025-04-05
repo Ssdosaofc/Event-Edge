@@ -1,9 +1,12 @@
+import 'dart:convert';
+
+import 'package:event_edge/functions/register_functions.dart';
 import 'package:event_edge/widgets/customPasswordField.dart';
 import 'package:event_edge/widgets/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../utils/gradient.dart';
+import '../utils/snackbar.dart';
 import '../widgets/customInputField.dart';
 import 'login.dart';
 
@@ -15,6 +18,7 @@ final confirmPasswordControllerProvider=Provider((ref)=> TextEditingController()
 
 class Signup extends ConsumerWidget{
   Signup({super.key});
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -120,8 +124,8 @@ class Signup extends ConsumerWidget{
                         const SizedBox(
                           height: 40,
                         ),
-                        _buildButton(context, ref),
-                        SizedBox(height: 100,),
+                        _buildButton(context, ref,usernameController,emailController,passwordController,confirmPasswordController),
+                        SizedBox(height: MediaQuery.of(context).size.height/10),
                         Center(
                           child: GestureDetector(
                             onTap: () {
@@ -149,7 +153,7 @@ class Signup extends ConsumerWidget{
                       ]
                     ),
               )
-              )
+              ),
             ]
           ),
         ),
@@ -158,7 +162,7 @@ class Signup extends ConsumerWidget{
   }
 }
 
-Widget _buildButton(BuildContext context,WidgetRef ref) {
+Widget _buildButton(BuildContext context,WidgetRef ref,username,email,password,confirmPassword) {
   return SizedBox(
     width: double.infinity,
     child: ElevatedButton(
@@ -168,7 +172,7 @@ Widget _buildButton(BuildContext context,WidgetRef ref) {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8))),
       onPressed: () {
-
+        registerUser(context,ref,username,email,password,confirmPassword);
       },
       child: Text("Register", style: TextStyle(color: Colors.white,fontSize: 16)),
     ),
