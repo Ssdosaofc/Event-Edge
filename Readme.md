@@ -69,11 +69,13 @@ We have implemented these features:
 ![image](recaghd.jpg)
 
 
+## Project Created & Maintained By
 
+## :heart: Team Vision
+1. [Shuvam Swapnil Dash](https://github.com/Ssdosaofc)
+2. [Shashwat Mandal](https://github.com/Shashwatmandal)
+3. [Kunal Bansal](https://github.com/Kunal-3004)
+4. [Shashank Kumar Roy](https://github.com/shashank2327)
+5. [Sachin Rajguru](https://github.com/Sachin1829Rajguru)
 
-
-
-
-
-![image](
 
