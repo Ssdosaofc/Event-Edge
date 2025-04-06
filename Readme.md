@@ -71,7 +71,7 @@ We have implemented these features:
 
 ## Project Created & Maintained By
 
-## :heart: Team Vision
+## :heart: Team BombaClat
 1. [Shuvam Swapnil Dash](https://github.com/Ssdosaofc)
 2. [Shashwat Mandal](https://github.com/Shashwatmandal)
 3. [Kunal Bansal](https://github.com/Kunal-3004)
