@@ -63,3 +63,5 @@ We have implemented these features:
 ⭐ <b>Project Proposal :</b> [Click Here to View](https://drive.google.com/file/d/18Mqpbvcpuy252ru1JhJK02zoKBXaivDz/view?usp=drive_link))
 
 
+![image](uml.jpg)
+
