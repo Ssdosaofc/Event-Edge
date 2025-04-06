@@ -22,7 +22,7 @@ class _HistroyState extends State<History> {
   TextEditingController _searchController = TextEditingController();
   String searchQuery = '';
 
-  Future<List<Event>> _getRecommendations() async {
+  Future<void> _getRecommendations() async {
     try {
       setState(() {
         isLoading = true;
@@ -42,22 +42,24 @@ class _HistroyState extends State<History> {
 
         setState(() {
           eventsList = fetchedEvents;
-          allEvents=fetchedEvents;
+          allEvents = fetchedEvents;
         });
       } else {
         print('Failed with status: ${response.statusCode}');
+        setState(() {
+          eventsList = [];
+        });
       }
-
-      setState(() {
-        isLoading = false;
-      });
     } catch (e) {
+      print('Error fetching events: $e');
+      setState(() {
+        eventsList = [];
+      });
+    } finally {
       setState(() {
         isLoading = false;
       });
-      print('Error fetching events: $e');
     }
-    return [];
   }
 
   void _showFilterOptions() {
@@ -127,72 +129,72 @@ class _HistroyState extends State<History> {
     });
   }
 
-
   @override
   void initState() {
     super.initState();
     _getRecommendations();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 14.0,left: 8,right: 8,bottom: 8),
-              child: TextField(
-                controller: _searchController,
-                onChanged: _filterEvents,
-                decoration: InputDecoration(
-                    hintText: "Search by event name",
-                    prefixIcon: Icon(Icons.search),
-                    suffixIcon: GestureDetector(
-                        onTap: (){
-                          _showFilterOptions();
-                        },
-                        child: Icon(Icons.filter_alt,size: 29,)
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: orange)
-                    )
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 14.0, left: 8, right: 8, bottom: 8),
+            child: TextField(
+              controller: _searchController,
+              onChanged: _filterEvents,
+              decoration: InputDecoration(
+                hintText: "Search by event name",
+                prefixIcon: Icon(Icons.search),
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    _showFilterOptions();
+                  },
+                  child: Icon(Icons.filter_alt, size: 29),
                 ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: orange)),
               ),
             ),
-            SizedBox(height: 10),
-            Expanded(
-              child: eventsList.isNotEmpty
-                  ? ListView.builder(
-                itemCount: eventsList.length,
-                itemBuilder: (context, i) {
-                  return CardView(
-                      poster: eventsList[i].poster,
-                      name: eventsList[i].title,
-                      category: eventsList[i].category,
-                      address: eventsList[i].address,
-                      price: eventsList[i].price,
-                      start: eventsList[i].start,
-                      end: eventsList[i].end,
-                      onTap: () {
-                        print("Tap on Button");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EventDetails(eventID: eventsList[i].id),
-                          ),
-                        );
-                      },
-                  );
-                },
-              )
-                  : Center(child: Text("No past events")),
-            ),
-
-          ],
-        )
+          ),
+          SizedBox(height: 10),
+          isLoading
+              ? Center(child: CircularProgressIndicator()) // Show loading indicator
+              : Expanded(
+            child: eventsList.isNotEmpty
+                ? ListView.builder(
+              itemCount: eventsList.length,
+              itemBuilder: (context, i) {
+                return CardView(
+                  poster: eventsList[i].poster,
+                  name: eventsList[i].title,
+                  category: eventsList[i].category,
+                  address: eventsList[i].address,
+                  price: eventsList[i].price,
+                  start: eventsList[i].start,
+                  end: eventsList[i].end,
+                  onTap: () {
+                    print("Tap on Button");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EventDetails(eventID: eventsList[i].id),
+                      ),
+                    );
+                  },
+                );
+              },
+            )
+                : Center(child: Text("No past events")),
+          ),
+        ],
+      ),
     );
   }
 }

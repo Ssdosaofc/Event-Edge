@@ -51,6 +51,10 @@ dependencies:
   syncfusion_flutter_charts:
   dio:
   flutter_gemini: ^3.0.0
+  uuid:
+  share_plus:
+  syncfusion_flutter_treemap:
+  firebase_core:
 
 dev_dependencies:
   flutter_test:

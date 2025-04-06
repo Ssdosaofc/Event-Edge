@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          duration: Duration(seconds: 2),
+          duration: Duration(milliseconds: 500),
         backgroundColor: Colors.red,
           content: Container(
 
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          duration: Duration(seconds: 2),
+          duration: Duration(milliseconds: 500),
           backgroundColor: Colors.green,
             content: Container(
               padding: EdgeInsets.all(5),

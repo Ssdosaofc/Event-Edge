@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
         drawer: Sidebar(controller: _controller),
         floatingActionButton: FloatingActionButton(
           shape: CircleBorder(),
-          backgroundColor: Color(0xFFFFE0B2),
+          backgroundColor: Colors.grey[200],
           foregroundColor: Colors.black,
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context)=>AddEvent()));

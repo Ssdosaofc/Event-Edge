@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=D:\Flutter\flutter"
-export "FLUTTER_APPLICATION_PATH=D:\event_edge"
+export "FLUTTER_ROOT=/Users/ssdosaofc/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/ssdosaofc/AndroidStudioProjects/event_edge"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"

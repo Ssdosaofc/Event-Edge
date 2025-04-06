@@ -29,6 +29,22 @@ class CardView extends StatelessWidget {
     this.onTap,
   });
 
+  String _getStatus(String start, String end) {
+    final now = DateTime.now();
+    final startTime = DateTime.tryParse(start);
+    final endTime = DateTime.tryParse(end);
+
+    if (startTime == null || endTime == null) return "Unknown";
+
+    if (now.isAfter(startTime) && now.isBefore(endTime)) {
+      return "Live";
+    } else if (now.isBefore(startTime)) {
+      return "Upcoming";
+    } else {
+      return "Ended";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return  InkWell(
@@ -80,6 +96,14 @@ class CardView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Text(
+                          _getStatus(start, end),
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            color: _getStatus(start, end) == 'Ended'?Colors.grey[700]:(_getStatus(start, end) == 'Live' ? Colors.red : Colors.green),
+                          ),
+                      ),
                       Text("Price: $price",style: GoogleFonts.poppins(fontWeight: FontWeight.w500,fontSize: 15),),
                       SizedBox(height: 20,),
                       Text("Start: $start",style: GoogleFonts.poppins(fontWeight: FontWeight.w400,fontSize: 10),),

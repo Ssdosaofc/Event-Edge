@@ -44,8 +44,8 @@ class _EventDetailsState extends State<EventDetails> {
 
       print(widget.eventID);
 
-      final response = await _dio.get("http://10.1.49.105:4000/api/events/${widget.eventID}");
-      final user_response = await _dio.get("http://10.1.49.105:4000/api/customers");
+      final response = await _dio.get("http://10.1.49.105:4006/api/events/${widget.eventID}");
+      final user_response = await _dio.get("http://10.1.49.105:4006/api/customers");
 
       if (response.statusCode == 200) {
         print('Success: ${response.data}');
@@ -58,6 +58,7 @@ class _EventDetailsState extends State<EventDetails> {
           print(usersJson);
           typeGrouped = getTicketTypeCounts(usersJson);
           typeData = convertToChartData(typeGrouped);
+          print(typeData);
 
           buyGroups = getBuyTimeGroups(usersJson);
           print(buyGroups);
@@ -246,10 +247,10 @@ class _EventDetailsState extends State<EventDetails> {
               ),
               SizedBox(height: 20,),
               SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Card(
-                    elevation: 5,
-                    child: Padding(
+                width: MediaQuery.of(context).size.width,
+                child: Card(
+                  elevation: 5,
+                  child: Padding(
                       padding: EdgeInsets.all(20),
                       child: Column(
                         children: [
@@ -293,9 +294,9 @@ class _EventDetailsState extends State<EventDetails> {
                         ],
 
                       )
-                    ),
                   ),
-                  ),
+                ),
+              ),
               SizedBox(height: 20,),
               SizedBox(
                 width: 200,
@@ -342,31 +343,31 @@ class _EventDetailsState extends State<EventDetails> {
   }
 
   Map<String, int> getBuyTimeGroups(List<dynamic> users) {
-  final Map<String, int> timeGroups = {
-  '12AM-6AM': 0,
-  '6AM-12PM': 0,
-  '12PM-6PM': 0,
-  '6PM-12AM': 0,
-  };
+    final Map<String, int> timeGroups = {
+      '12AM-6AM': 0,
+      '6AM-12PM': 0,
+      '12PM-6PM': 0,
+      '6PM-12AM': 0,
+    };
 
-  for (var user in users) {
-  if (user['eventId'] == widget.eventID) {
-  int hour = user['buyTime'];
+    for (var user in users) {
+      if (user['eventId'] == widget.eventID) {
+        int hour = user['buyTime'];
 
-  print('User Buy Time: ${user['buyTime']}');
-  if (hour >= 0 && hour < 6) {
-  timeGroups['12AM-6AM'] = timeGroups['12AM-6AM']! + 1;
-  } else if (hour >= 6 && hour < 12) {
-  timeGroups['6AM-12PM'] = timeGroups['6AM-12PM']! + 1;
-  } else if (hour >= 12 && hour < 18) {
-  timeGroups['12PM-6PM'] = timeGroups['12PM-6PM']! + 1;
-  } else {
-  timeGroups['6PM-12AM'] = timeGroups['6PM-12AM']! + 1;
-  }
-  }
-  }
+        print('User Buy Time: ${user['buyTime']}');
+        if (hour >= 0 && hour < 6) {
+          timeGroups['12AM-6AM'] = timeGroups['12AM-6AM']! + 1;
+        } else if (hour >= 6 && hour < 12) {
+          timeGroups['6AM-12PM'] = timeGroups['6AM-12PM']! + 1;
+        } else if (hour >= 12 && hour < 18) {
+          timeGroups['12PM-6PM'] = timeGroups['12PM-6PM']! + 1;
+        } else {
+          timeGroups['6PM-12AM'] = timeGroups['6PM-12AM']! + 1;
+        }
+      }
+    }
 
-  return timeGroups;
+    return timeGroups;
   }
 
 }
@@ -377,4 +378,3 @@ class ChartData {
 
   ChartData(this.label, this.value);
 }
-

@@ -84,16 +84,21 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin{
         isLoading = true;
       });
 
-      final response = await _dio.get(Utils.fetchEventUrl);
+      final response = await _dio.get(Utils.eventUrl);
 
       if (response.statusCode == 200 && response.data is List) {
         print('Success: ${response.data}');
 
         final now = DateTime.now();
 
+        final today = DateTime(now.year, now.month, now.day);
+
         List<Event> fetchedEvents = (response.data as List)
             .map((e) => Event.fromMap(e))
-            .where((event) => DateTime.parse(event.end).isAfter(now))
+            .where((event) {
+          DateTime eventStart = DateTime.parse(event.start);
+          return eventStart.isAfter(today) || eventStart.isAtSameMomentAs(today);
+        })
             .toList();
 
         setState(() {
@@ -154,73 +159,73 @@ class _DashboardState extends State<Dashboard> with TickerProviderStateMixin{
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
-            children: [
-              TabBar(
-                labelColor: Colors.orange,
-                indicatorColor: orange,
+          children: [
+            TabBar(
+              labelColor: Colors.orange,
+              indicatorColor: orange,
+              controller: _tabController,
+              tabs: [
+                Tab(text: "Events"),
+                Tab(text: "Analytics"),
+              ],
+            ),
+            SizedBox(height: 10),
+            Expanded(
+              child: TabBarView(
                 controller: _tabController,
-                tabs: [
-                  Tab(text: "Events"),
-                  Tab(text: "Analytics"),
-                ],
-              ),
-              SizedBox(height: 10),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 14.0,left: 8,right: 8,bottom: 8),
-                          child: TextField(
-                            controller: _searchController,
-                            onChanged: _filterEvents,
-                            decoration: InputDecoration(
+                children: [
+                  Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 14.0,left: 8,right: 8,bottom: 8),
+                        child: TextField(
+                          controller: _searchController,
+                          onChanged: _filterEvents,
+                          decoration: InputDecoration(
                               hintText: "Search by event name",
                               prefixIcon: Icon(Icons.search),
                               suffixIcon: GestureDetector(
-                                onTap: (){
-                                  _showFilterOptions(context);
-                                },
+                                  onTap: (){
+                                    _showFilterOptions(context);
+                                  },
                                   child: Icon(Icons.filter_alt,size: 29,)
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide(color: orange)
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(color: orange)
                               )
-                            ),
                           ),
                         ),
-                        Expanded(
-                          child: eventsList.isNotEmpty
-                              ? ListView.builder(
-                            itemCount: eventsList.length,
-                            itemBuilder: (context, i) {
-                              return CardView(
-                                poster: eventsList[i].poster,
-                                name: eventsList[i].title,
-                                category: eventsList[i].category,
-                                address: eventsList[i].address,
-                                price: eventsList[i].price,
-                                start: eventsList[i].start,
-                                end: eventsList[i].end,
-                              );
-                            },
-                          )
-                              : Center(child: Text("No events found")),
-                        ),
-                      ],
-                    ),
-                    Analytics(),
-                  ],
-                ),
+                      ),
+                      Expanded(
+                        child: eventsList.isNotEmpty
+                            ? ListView.builder(
+                          itemCount: eventsList.length,
+                          itemBuilder: (context, i) {
+                            return CardView(
+                              poster: eventsList[i].poster,
+                              name: eventsList[i].title,
+                              category: eventsList[i].category,
+                              address: eventsList[i].address,
+                              price: eventsList[i].price,
+                              start: eventsList[i].start,
+                              end: eventsList[i].end,
+                            );
+                          },
+                        )
+                            : Center(child: Text("No events found")),
+                      ),
+                    ],
+                  ),
+                  Analytics(),
+                ],
               ),
-            ],
+            ),
+          ],
         )
-        );
-    }
+    );
+  }
 }

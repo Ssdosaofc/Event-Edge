@@ -31,7 +31,7 @@ class _RecommendationsState extends State<Recommendations> {
         isLoading = true;
       });
 
-      final response = await _dio.get('http://10.100.39.38:4500/api/events');
+      final response = await _dio.get('http://10.1.49.105:4006/api/events');
 
       if (response.statusCode == 200) {
         // print('Success: ${response.data}');
@@ -45,7 +45,7 @@ class _RecommendationsState extends State<Recommendations> {
       Future.delayed(Duration(milliseconds: 1000), () async {
 
         final response = await _dio.post(
-          'http://10.0.2.2:5000/recommend',
+          'http://10.1.49.105:4006/recommend',
           data: jsonEncode({'result': body}),
           options: Options(
             contentType: Headers.jsonContentType,
