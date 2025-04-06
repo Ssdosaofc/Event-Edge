@@ -24,12 +24,32 @@
 We developed a mobile-first application that empowers event organizers with real-time visibility into ticket sales, audience demographics, revenue streams, and marketing performance. The app addresses the common pain points of relying on static reports or third-party tools by offering live dashboards, sales tracking, and actionable insights on the go. This enables organizers to make data-driven decisions instantly, optimize ad spend, respond proactively to sales trends, and maximize event success.
 
 ### Objectives :
-1. Make it easy for the event organisers to create live events and sell tickets.
-2. Make it easy for the event organisers to track their events sales systematically and nicely by graphical representation.
-3. Have a record of the past events for analysis and improvements for further events
-4. Have a user friendly interface for the organisers
-5. Interactive chat bot feature in case the user wants someone to talk with when no one is around.
-6. A feature to connect all the users together at real-time and they can have a conversation among themselves. This will improve their communication skills and can provide them recreational time with some new friends.
-7. An option to even connect with a VoCo Expert to clear course related doubts and any queries they might have.
-8. Fun and interactive games section to improve their mental ability and train their mind.
-9. To improve the UI for more easy usability for the visually impaired people.
+1. Easy Event Creation & Ticketing: Seamless interface to launch events and start selling tickets instantly.
+2. Live Sales Tracking: Real-time monitoring of sales data with intuitive graphs and charts for quick analysis.
+3. Event History & Analytics: Archived data of past events helps in understanding trends and planning future strategies.
+4. Smart Recommendations: The app analyzes high and low-performing events to suggest actionable improvements.
+5. Voice Assistant Integration: Built-in Gemini voice assistant allows hands-free, smooth interaction for quick queries and actions.
+6. Emergency Alerts: Instant push notifications keep organizers informed about urgent or unexpected situations.
+7. User-Friendly Interface: Designed with simplicity and speed in mind to ensure a smooth experience for all users.
+
+### Status :
+We have implemented these features:
+  1. User Login through Node, Mongo and Express.
+  2. All features listed above were done by doing frontend using flutter, syncfusion and backend using MongoDB express.
+  3. Recommender System Model was trained using weighted average and was integrated using Flask.
+  4. In app voice based guide i.e gemini was integrated.
+
+
+### Tech Stacks Used :
+⦿ <b>FrontEnd :</b> 
+* Flutter
+⦿ <b>BackEnd :</b>
+* Firebase, Node.js, Express, Flask
+
+⦿ <b>Recommender :</b>
+* Tensor Recommender, Numpy, Pandas
+
+⦿ <b>Database :</b>
+* MongoDB
+
+
