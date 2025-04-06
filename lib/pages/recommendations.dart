@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
@@ -82,6 +84,10 @@ class _RecommendationsState extends State<Recommendations> {
     }
   }
   List<Event> recommendationsList = [];
+
+
+
+
 
   @override
   void initState() {
