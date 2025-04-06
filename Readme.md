@@ -59,7 +59,5 @@ We have implemented these features:
 
 ⭐️ <b>Video : Understanding Event Edge</b>
 
-[![Watch the video]()]()
-
 ⭐️ <b>Project Proposal :</b> [Click Here to View]([https://drive.google.com/file/d/1IWLqan4KK0uA738anxIMGWorU3y1yo0H/view?usp=sharing](https://drive.google.com/file/d/18Mqpbvcpuy252ru1JhJK02zoKBXaivDz/view?usp=drive_link))
 
