@@ -57,7 +57,7 @@ We have implemented these features:
 
 ⭐️ <b>Main PPT :</b> [Click Here to View](https://www.canva.com/design/DAGjtM4Rnog/QnxVc--IfSr9_1G53ylEsA/edit)
 
-⭐️ <b>Video : Understanding Event Edge</b>
+⭐️ <b>Video : [Understanding Event Edge](https://drive.google.com/file/d/1pJ_8HEvRv02YkoEnCEQIoI3QT0hOFhP1/view?usp=drive_link)</b>
 
 
 ⭐ <b>Project Proposal :</b> [Click Here to View](https://drive.google.com/file/d/18Mqpbvcpuy252ru1JhJK02zoKBXaivDz/view?usp=drive_link))
